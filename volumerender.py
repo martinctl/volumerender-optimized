@@ -78,8 +78,11 @@ def main(args):
         qi = np.array([qx_r.ravel(), qy_r.ravel(), qz_r.ravel()]).T
 
         # Interpolate onto Camera Grid
-        camera_grid = interpn(points, datacube, qi, method="linear").reshape((N, N, N))
-
+        if args.interpolate_func == "scipy":
+            camera_grid = interpn(points, datacube, qi, method="linear").reshape((N, N, N))
+        else:
+            raise ValueError("Unknown interpolation function")
+            
         # Do Volume Rendering
         image = np.zeros((camera_grid.shape[1], camera_grid.shape[2], 3))
 
@@ -89,6 +92,9 @@ def main(args):
                 r, g, b, a = transfer_function(np.log(dataslice))
             elif args.transfer_func == "hand-optimized":
                 r, g, b, a = transfer_function_optimized(np.log(dataslice))
+            else:
+                raise ValueError("Unknown transfer function")
+            
             image[:, :, 0] = a * r + (1 - a) * image[:, :, 0]
             image[:, :, 1] = a * g + (1 - a) * image[:, :, 1]
             image[:, :, 2] = a * b + (1 - a) * image[:, :, 2]
@@ -146,6 +152,13 @@ if __name__ == "__main__":
         choices=["original", "hand-optimized", "cython"],
         dest="transfer_func",
         help="Transfer function to use",
+    )
+    parser.add_argument(
+        "--interpolate-function",
+        default="scipy",
+        choices=["scipy"],
+        dest="interpolate_func",
+        help="Interpolation function to use",
     )
     args = parser.parse_args()
 

@@ -91,11 +91,11 @@ def just_time(*versions):
 if __name__ == "__main__":
     v0_original = (
         "v0_original",
-        argparse.Namespace(render=False, plot=False, transfer_func="original"),
+        argparse.Namespace(render=False, plot=False, transfer_func="original", interpolate_func="scipy"),
     )
     v1_hand_optimized = (
         "v1_hand_optimized",
-        argparse.Namespace(render=False, plot=False, transfer_func="hand-optimized"),
+        argparse.Namespace(render=False, plot=False, transfer_func="hand-optimized", interpolate_func="scipy"),
     )
 
     plot_all_version_comparison(v0_original, v1_hand_optimized)
