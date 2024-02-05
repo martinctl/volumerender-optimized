@@ -44,13 +44,13 @@ def time_function(fn):
         execution_times = np.empty((num_iters,))
         for i in range(num_iters):
             t1 = timer()
-            fn(*args, **kwargs)
+            output = fn(*args, **kwargs)
             t2 = timer()
             execution_times[i] = t2 - t1
 
         mean = np.mean(execution_times)
         std = np.std(execution_times)
-        return mean, std
+        return mean, std, output
 
     return measure_time
 
@@ -64,7 +64,8 @@ def plot_all_version_comparison(*versions):
     # with the mean execution time and standard deviation
     version = []
     for name, args in versions:
-        mean, std = time_function(call_version)(args)
+        mean, std, output = time_function(call_version)(args)
+        compare_data(output)
         version.append((name, mean, std))
 
     # Now we plot the results
