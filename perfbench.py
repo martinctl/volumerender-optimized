@@ -63,7 +63,7 @@ def plot_all_version_comparison(*versions):
     # with the mean execution time and standard deviation
     version = []
     for name, args in versions:
-        mean, std, output = time_function(call_version)(args)
+        mean, std, output = time_function(call_version, num_iters=5)(args)
         compare_data(output)
         version.append((name, mean, std))
 
@@ -97,5 +97,18 @@ if __name__ == "__main__":
         "v1_hand_optimized",
         argparse.Namespace(render=False, plot=False, transfer_func="hand-optimized", interpolate_func="scipy"),
     )
+    v2_scipy2 = (
+        "v2_scipy2",
+        argparse.Namespace(render=False, plot=False, transfer_func="hand-optimized", interpolate_func="scipy2"),
+    )
+    v3_parallel = (
+        "v3_parallel",
+        argparse.Namespace(render=False, plot=False, transfer_func="hand-optimized", interpolate_func="scipy", parallel="concurrent-futures"),
+    )
+    v4_parallel = (
+        "v4_parallel",
+        argparse.Namespace(render=False, plot=False, transfer_func="hand-optimized", interpolate_func="scipy", parallel="multiprocessing"),
+    )
 
-    plot_all_version_comparison(v0_original, v1_hand_optimized)
+    # Plot all the versions
+    plot_all_version_comparison(v0_original, v1_hand_optimized, v2_scipy2, v3_parallel, v4_parallel)
