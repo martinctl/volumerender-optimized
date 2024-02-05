@@ -87,6 +87,25 @@ def just_time(*versions):
         compare_data(output)
         print(f"{name} : {mean}s +- {std}")
 
+def parallel_workers_comparison(parallel: str, start: int, end: int):
+    if parallel not in ["concurrent-futures", "multiprocessing"]:
+        raise ValueError("parallel must be 'concurrent-futures' or 'multiprocessing'")
+    versions = []
+    for i in range(start, end + 1):
+        versions.append(
+            (
+                f"v4_parallel_{i}_workers",
+                argparse.Namespace(
+                    render=False,
+                    plot=False,
+                    transfer_func="hand-optimized",
+                    interpolate_func="scipy",
+                    parallel=parallel,
+                    num_workers=i,
+                ),
+            )
+        )
+    plot_all_version_comparison(*versions)
 
 if __name__ == "__main__":
     v0_original = (
@@ -111,4 +130,4 @@ if __name__ == "__main__":
     )
 
     # Plot all the versions
-    plot_all_version_comparison(v0_original, v1_hand_optimized, v2_scipy2, v3_parallel, v4_parallel)
+    # plot_all_version_comparison(v0_original, v1_hand_optimized, v2_scipy2, v3_parallel, v4_parallel)
