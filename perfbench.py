@@ -38,9 +38,8 @@ def compare_data(optimized):
         assert test
 
 
-def time_function(fn):
+def time_function(fn, num_iters=1):
     def measure_time(*args, **kwargs):
-        num_iters = 1
         execution_times = np.empty((num_iters,))
         for i in range(num_iters):
             t1 = timer()
@@ -84,7 +83,8 @@ def plot_all_version_comparison(*versions):
 
 def just_time(*versions):
     for name, args in versions:
-        mean, std = time_function(call_version)(args)
+        mean, std, output = time_function(call_version)(args)
+        compare_data(output)
         print(f"{name} : {mean}s +- {std}")
 
 
