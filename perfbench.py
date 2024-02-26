@@ -54,7 +54,7 @@ def compare_data(optimized: np.array):
         assert test
 
 
-def time_function(fn: callable, num_iters: int = 1) -> callable:
+def time_function(fn: callable, num_iters: int = 5) -> callable:
     """! Measure the time of the function fn.
 
     @param fn: The function to measure the time of
@@ -78,7 +78,7 @@ def time_function(fn: callable, num_iters: int = 1) -> callable:
     return measure_time
 
 
-def plot_versions(*versions: tuple):
+def plot_versions(*versions: tuple, num_iters=5):
     """! Plot the performance of given versions as a horizontal bar chart
     with the mean execution time and standard deviation.
 
@@ -86,7 +86,7 @@ def plot_versions(*versions: tuple):
     """
     version = []
     for name, args in versions:
-        mean, std, output = time_function(volumerender.main)(args)
+        mean, std, output = time_function(volumerender.main, num_iters)(args)
         compare_data(output)
         version.append((name, mean, std))
 
@@ -198,4 +198,4 @@ if __name__ == "__main__":
     )
 
     # Comment versions depending on what you want to compare.
-    plot_versions(v0_original, v1_hand_optimized, v2_scipy2, v3_parallel, v4_parallel)
+    plot_versions(v0_original, v1_hand_optimized, v2_scipy2, v3_parallel, v4_parallel, num_iters=2)
