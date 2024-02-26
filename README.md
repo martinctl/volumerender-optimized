@@ -5,7 +5,7 @@ This project is an optimization of the following, accessible [here](https://gith
 > Philip Mocz (2020) Princeton University, @PMocz 
 
 `volumerender-optimized` is a Python program used to create volume renderings to visualize 3D simulation datacubes. The main point of this program
-is to include several optimizations to the original volumerender.py script, in order to improve performance, especially time. It also features many comparison mechanisms to analyze the differences between several techniques, including GPU computations, multiprocessing and hand optimizations. 
+is to include several optimizations to the original `volumerender.py` script, in order to improve performance, especially time. It also features many comparison mechanisms to analyze the differences between several techniques, including GPU computations, multiprocessing and hand optimizations. 
 
 ## Run instructions
 Whether you are in a virtual environment or not, you can install the required dependencies using the file `requirements.txt`.
@@ -14,7 +14,6 @@ pip install -r requirements.txt
 ```
 
 There are two modules to consider. The first one, `volumerender.py`, is actually performing the volume rendering. The second one, `perfbench.py`, is used to benchmark the performance of the `volumerender.py` script, using different arguments corresponding to different optimizations, called `versions`. 
-
 
 ### `volumerender.py`
 
@@ -26,7 +25,6 @@ The variables `n_angles` and `n` respectively correspond to the number of angles
 ```shell=
 python3 volumerender.py
 ````
-
 You can also pass command-line arguments to this program so as to test several time optimizations and enable/disable plotting/rendering the result.
 
 | Argument | Action |
@@ -55,8 +53,7 @@ You can modify the used versions in the last lines of the code, where they are a
 | `v3_parallel` | `hand-optimized` | `scipy` | `concurrent-futures` |
 | `v4_parallel` | `hand-optimized` | `scipy` | `multiprocessing` |
 
-The parallel versions use `8` cores by defautl, one again, you can modify this value going through the code. 
-
+The parallel versions use `8` cores by default, once again, you can modify this value going through the code. 
 
 ## Unit-testing
 So as to ensure that our optimized functions produced the same result as the original ones, we designed a unit-test called `compare_data` in the file `perfbench.py`. This function uses the original data given by P. Mocz and asserts that all found results are equal.
@@ -67,7 +64,6 @@ For our GPU optimization, we chose to run the program in Google Colab so that we
 2. Import the notebook from the `colab/` directory
 3. In the `File` tab, import the input dataset `datacube.hdf5` to Google Colab and move it in a new folder named `data/` => `/data/datacube.hdf5`
 4. You can run and read the notebook as usual !
-
 
 ## Generate documentation
 This project supports Doxygen for documentation. In order to generate HTML pages, just go into the `docs/` directory and run the following command. 
