@@ -38,11 +38,12 @@ You can also pass command-line arguments to this program so as to test several t
 
 ### `perfbench.py`
 
-Use the following to get a comparison of running times of several versions using different optimizations.
+Use the following to get a comparison of running times of several versions using different optimizations. 
 ```shell=
 python3 perfbench.py
 ```
-
+The function used to compute execution time is `time_function`. The number of iterations needed to have a reliable 
+mean and standard deviation is passed a the `num_iters` argument. You can modify it as you wish.
 You can modify the used versions in the last lines of the code, where they are all specified. Here is a summary. 
 
 | Name | Transfer function | Interpolation function | Parallelism |

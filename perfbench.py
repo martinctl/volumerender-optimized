@@ -83,6 +83,7 @@ def plot_versions(*versions: tuple, num_iters=5):
     with the mean execution time and standard deviation.
 
     @param versions: A tuple of elements, each containing parameters for one specific version
+    @param num_iters: The number of iterations to measure the time
     """
     version = []
     for name, args in versions:
