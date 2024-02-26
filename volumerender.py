@@ -107,7 +107,7 @@ def transfer_function_optimized(x: np.array) -> tuple:
     return r, g, b, a
 
 
-def render_angle(datacube: np.array, points: tuple, angle: int, n_angles: int, n: int, cli_args) -> np.array:
+def render_angle(datacube: np.array, points: tuple, angle: int, n_angles: int, n: int, cli_args: argparse.Namespace) -> np.array:
     """! Render a single angle of the volume rendering.
 
     @param datacube: 3D datacube of density, opened with h5py and stored in a numpy array
@@ -156,11 +156,8 @@ def render_angle(datacube: np.array, points: tuple, angle: int, n_angles: int, n
 
     if cli_args.render:
         plt.figure(figsize=(4, 4), dpi=80)
-
         plt.imshow(image)
         plt.axis("off")
-
-        # Save figure
         plt.savefig(
             "data/img/volumerender" + str(angle) + ".png",
             dpi=240,
@@ -170,7 +167,7 @@ def render_angle(datacube: np.array, points: tuple, angle: int, n_angles: int, n
     return image
 
 
-def main(cli_args):
+def main(cli_args: argparse.Namespace):
     """! Main function to run the volume rendering with the given CLI arguments.
 
     @param cli_args: CLI arguments
@@ -268,7 +265,8 @@ if __name__ == "__main__":
         dest="parallel",
         help="Use parallel processing",
     )
-    # Add argument for number of workers in parallel processing
+
+    # Number of workers in parallel processing
     parser.add_argument(
         "--num-workers",
         default=8,

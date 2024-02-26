@@ -31,7 +31,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 from timeit import default_timer as timer
-
 import volumerender
 
 
@@ -57,7 +56,6 @@ def compare_data(optimized: np.array):
 
 def time_function(fn: callable, num_iters: int = 1) -> callable:
     """! Measure the time of the function fn.
-    This function is used to measure the time of the function fn
 
     @param fn: The function to measure the time of
     @param num_iters: The number of iterations to measure the time
