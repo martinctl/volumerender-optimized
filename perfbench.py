@@ -1,52 +1,80 @@
-import argparse
-import volumerender
-import numpy as np
+"""! @brief Performance benchmarking of the volumerender script."""
+
+##
+# @file perfbench.py
+#
+# @brief Performance benchmarking of the volumerender script.
+#
+# @section description_perfbench Description
+# Benchmarks the performance of the volumerender script, using different CLI arguments. It also displays the results.
+# It is used to compare the performance of the volumerender script after some optimization.
+#
+# @section libraries_perfbench Libraries/Modules
+# - Standard os library
+# - numpy library (np)
+# - matplotlib.pyplot (plt)
+# - argparse
+# - timeit
+#   - default_timer (timer)
+# - volumerender
+#
+# @section notes_perfbench Notes
+# You can compare the performance of two (or more) versions of the script
+# or choose what optimization you want to use in the versions.
+# You can also compare all the versions of the script with the original.
+#
+# @section author_volumerender Author(s)
+# - Created by Martin Catheland on 05/02/2024.
+# - Modified by Martin Catheland, Roxanne Chevalley and Jean Perbet on 26/02/2024.
+
+# Imports
 import os
-from timeit import default_timer as timer
+import numpy as np
 import matplotlib.pyplot as plt
+import argparse
+from timeit import default_timer as timer
 
-"""
-This is a performance benchmarking tool for the volumerender script. 
-It is used to compare the performance of the volumerender script with 
-the performance of the volumerender script after some optimization.
-
-You can compare the performance of two (or more) versions of the script 
-or choose what optimization you want to use in the verions.
-
-You can also compare all the versions of the script with the original
-"""
+import volumerender
 
 
-def export_data(output, folder_name):
-    basepath = "data/"
-    if not os.path.exists(basepath + folder_name):
-        os.makedirs(basepath + folder_name)
-    for i in range(len(output)):
-        np.save(basepath + folder_name + "/volumerender" + str(i) + ".npy", output[i])
+# Functions
+def compare_data(optimized: np.array):
+    """! Compare the data from the optimized version with the original.
+    This function is used for unit testing, and ensures that
+    optimized versions yield the same results as the original.
 
+    :param optimized: The data from the optimized version.
+    """
 
-# Function to compare data with the original version
-def compare_data(optimized):
-    originalpath = "data/original/"
+    original_path = "data/original/"
     for i in range(len(optimized)):
-        original = np.load(originalpath + "volumerender" + str(i) + ".npy")
+        original = np.load(original_path + "volumerender" + str(i) + ".npy")
         test = np.allclose(optimized[i], original)
         if not test:
-            print("Data from the optimized version is not the same as the original")
+            print("Data from the optimized version is not the same as the original.")
             print("Original : ", original)
             print("Optimized : ", optimized[i])
         assert test
 
 
-def time_function(fn, num_iters=1):
+def time_function(fn, num_iters=1) -> callable:
+    """! Measure the time of the function fn.
+    This function is used to measure the time of the function fn
+
+    :param fn: The function to measure the time of
+    :param num_iters: The number of iterations to measure the time
+    :return a callable function that returns mean and standard deviation of
+    the execution time, as well as the output in a tuple
+    """
+
     def measure_time(*args, **kwargs):
         execution_times = np.empty((num_iters,))
+        output = np.zeros((1, 1, 1))
         for i in range(num_iters):
             t1 = timer()
             output = fn(*args, **kwargs)
             t2 = timer()
             execution_times[i] = t2 - t1
-
         mean = np.mean(execution_times)
         std = np.std(execution_times)
         return mean, std, output
@@ -54,16 +82,15 @@ def time_function(fn, num_iters=1):
     return measure_time
 
 
-def call_version(args):
-    return volumerender.main(args)
+def plot_versions(*versions: tuple):
+    """! Plot the performance of given versions as a horizontal bar chart
+    with the mean execution time and standard deviation.
 
-
-def plot_all_version_comparison(*versions):
-    # Plot the performance of all the versions as a horizontal bar chart
-    # with the mean execution time and standard deviation
+    :param versions: A tuple of elements, each containing parameters for one specific version
+    """
     version = []
     for name, args in versions:
-        mean, std, output = time_function(call_version, num_iters=5)(args)
+        mean, std, output = time_function(volumerender.main)(args)
         compare_data(output)
         version.append((name, mean, std))
 
@@ -82,12 +109,24 @@ def plot_all_version_comparison(*versions):
 
 
 def just_time(*versions):
+    """! Print the mean and standard deviation of the execution time of given versions.
+
+    :param versions: A tuple of elements, each containing parameters for one specific version
+    """
     for name, args in versions:
         mean, std, output = time_function(call_version)(args)
         compare_data(output)
         print(f"{name} : {mean}s +- {std}")
 
+
 def parallel_workers_comparison(parallel: str, start: int, end: int):
+    """! Compare the performance of the parallel versions of the script with different number of workers
+
+    :param parallel: Either "concurrent-futures" or "multiprocessing", the parallelization method to use
+    :param start: The number of workers to start with
+    :param end: The number of workers to end with
+    """
+
     if parallel not in ["concurrent-futures", "multiprocessing"]:
         raise ValueError("parallel must be 'concurrent-futures' or 'multiprocessing'")
     versions = []
@@ -105,29 +144,62 @@ def parallel_workers_comparison(parallel: str, start: int, end: int):
                 ),
             )
         )
-    plot_all_version_comparison(*versions)
+    plot_versions(*versions)
+
 
 if __name__ == "__main__":
     v0_original = (
         "v0_original",
-        argparse.Namespace(render=False, plot=False, transfer_func="original", interpolate_func="scipy"),
+        argparse.Namespace(
+            render=False,
+            plot=False,
+            transfer_func="original",
+            interpolate_func="scipy",
+            parallel="serial"
+        ),
     )
     v1_hand_optimized = (
         "v1_hand_optimized",
-        argparse.Namespace(render=False, plot=False, transfer_func="hand-optimized", interpolate_func="scipy"),
+        argparse.Namespace(
+            render=False,
+            plot=False,
+            transfer_func="hand-optimized",
+            interpolate_func="scipy",
+            parallel="serial"
+        ),
     )
     v2_scipy2 = (
         "v2_scipy2",
-        argparse.Namespace(render=False, plot=False, transfer_func="hand-optimized", interpolate_func="scipy2"),
+        argparse.Namespace(
+            render=False,
+            plot=False,
+            transfer_func="hand-optimized",
+            interpolate_func="scipy2",
+            parallel = "serial"
+        ),
     )
     v3_parallel = (
         "v3_parallel",
-        argparse.Namespace(render=False, plot=False, transfer_func="hand-optimized", interpolate_func="scipy", parallel="concurrent-futures"),
+        argparse.Namespace(
+            render=False,
+            plot=False,
+            transfer_func="hand-optimized",
+            interpolate_func="scipy",
+            parallel="concurrent-futures",
+            num_workers=8
+        ),
     )
     v4_parallel = (
         "v4_parallel",
-        argparse.Namespace(render=False, plot=False, transfer_func="hand-optimized", interpolate_func="scipy", parallel="multiprocessing"),
+        argparse.Namespace(
+            render=False,
+            plot=False,
+            transfer_func="hand-optimized",
+            interpolate_func="scipy",
+            parallel="multiprocessing",
+            num_workers=8
+        ),
     )
 
-    # Plot all the versions
-    # plot_all_version_comparison(v0_original, v1_hand_optimized, v2_scipy2, v3_parallel, v4_parallel)
+    # Comment versions depending on what you want to compare.
+    plot_versions(v0_original, v1_hand_optimized, v2_scipy2, v3_parallel, v4_parallel)
