@@ -62,7 +62,7 @@ from multiprocessing import Pool
 def transfer_function(x: np.array) -> tuple:
     """! Transfer function to use for volume rendering.
 
-    :param x: Input density data
+    @param x: Input density data
     :return: red, green, blue, and opacity value (r,g,b,a)
     """
 
@@ -93,7 +93,7 @@ def transfer_function_optimized(x: np.array) -> tuple:
     """! Transfer function to use for volume rendering. It is hand-optimized to
     avoid performing the same calculations multiple times.
 
-    :param x: Input density data
+    @param x: Input density data
     :return: red, green, blue, and opacity value (r,g,b,a)
     """
 
@@ -110,12 +110,12 @@ def transfer_function_optimized(x: np.array) -> tuple:
 def render_angle(datacube: np.array, points: tuple, angle: int, n_angles: int, n: int, cli_args) -> np.array:
     """! Render a single angle of the volume rendering.
 
-    :param datacube: 3D datacube of density, opened with h5py and stored in a numpy array
-    :param points: 3D grid containing the datacube, tuple (x, y, z) of numpy linear spaces
-    :param angle: Angle of the volume rendering (0 <= angle < n_angles)
-    :param n_angles: Total number of angles to render
-    :param n: Resolution of the camera grid
-    :param cli_args: CLI arguments
+    @param datacube: 3D datacube of density, opened with h5py and stored in a numpy array
+    @param points: 3D grid containing the datacube, tuple (x, y, z) of numpy linear spaces
+    @param angle: Angle of the volume rendering (0 <= angle < n_angles)
+    @param n_angles: Total number of angles to render
+    @param n: Resolution of the camera grid
+    @param cli_args: CLI arguments
     """
 
     print("Rendering Scene " + str(angle + 1) + " of " + str(n_angles) + ".")
@@ -173,7 +173,7 @@ def render_angle(datacube: np.array, points: tuple, angle: int, n_angles: int, n
 def main(cli_args):
     """! Main function to run the volume rendering with the given CLI arguments.
 
-    :param cli_args: CLI arguments
+    @param cli_args: CLI arguments
     """
 
     # Load datacube

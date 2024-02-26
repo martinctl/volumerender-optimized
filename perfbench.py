@@ -43,7 +43,7 @@ def compare_data(optimized: np.array):
     This function is used for unit testing, and ensures that
     optimized versions yield the same results as the original.
 
-    :param optimized: The data from the optimized version.
+    @param optimized: The data from the optimized version.
     """
 
     original_path = "data/original/"
@@ -61,8 +61,8 @@ def time_function(fn, num_iters=1) -> callable:
     """! Measure the time of the function fn.
     This function is used to measure the time of the function fn
 
-    :param fn: The function to measure the time of
-    :param num_iters: The number of iterations to measure the time
+    @param fn: The function to measure the time of
+    @param num_iters: The number of iterations to measure the time
     :return a callable function that returns mean and standard deviation of
     the execution time, as well as the output in a tuple
     """
@@ -86,7 +86,7 @@ def plot_versions(*versions: tuple):
     """! Plot the performance of given versions as a horizontal bar chart
     with the mean execution time and standard deviation.
 
-    :param versions: A tuple of elements, each containing parameters for one specific version
+    @param versions: A tuple of elements, each containing parameters for one specific version
     """
     version = []
     for name, args in versions:
@@ -111,7 +111,7 @@ def plot_versions(*versions: tuple):
 def just_time(*versions):
     """! Print the mean and standard deviation of the execution time of given versions.
 
-    :param versions: A tuple of elements, each containing parameters for one specific version
+    @param versions: A tuple of elements, each containing parameters for one specific version
     """
     for name, args in versions:
         mean, std, output = time_function(call_version)(args)
@@ -122,9 +122,9 @@ def just_time(*versions):
 def parallel_workers_comparison(parallel: str, start: int, end: int):
     """! Compare the performance of the parallel versions of the script with different number of workers
 
-    :param parallel: Either "concurrent-futures" or "multiprocessing", the parallelization method to use
-    :param start: The number of workers to start with
-    :param end: The number of workers to end with
+    @param parallel: Either "concurrent-futures" or "multiprocessing", the parallelization method to use
+    @param start: The number of workers to start with
+    @param end: The number of workers to end with
     """
 
     if parallel not in ["concurrent-futures", "multiprocessing"]:
@@ -175,7 +175,7 @@ if __name__ == "__main__":
             plot=False,
             transfer_func="hand-optimized",
             interpolate_func="scipy2",
-            parallel = "serial"
+            parallel="serial"
         ),
     )
     v3_parallel = (
