@@ -55,7 +55,7 @@ def compare_data(optimized: np.array):
         assert test
 
 
-def time_function(fn, num_iters=5) -> callable:
+def time_function(fn: callable, num_iters: int = 5) -> callable:
     """! Measure the time of the function fn.
     This function is used to measure the time of the function fn
 
@@ -106,7 +106,7 @@ def plot_versions(*versions: tuple, num_iters=5):
     plt.show()
 
 
-def just_time(*versions):
+def plot_time(*versions: tuple):
     """! Print the mean and standard deviation of the execution time of given versions.
 
     @param versions: A tuple of elements, each containing parameters for one specific version
