@@ -10,7 +10,6 @@
 # It is used to compare the performance of the volumerender script after some optimization.
 #
 # @section libraries_perfbench Libraries/Modules
-# - Standard os library
 # - numpy library (np)
 # - matplotlib.pyplot (plt)
 # - argparse
@@ -28,7 +27,6 @@
 # - Modified by Martin Catheland, Roxanne Chevalley and Jean Perbet on 26/02/2024.
 
 # Imports
-import os
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
@@ -114,7 +112,7 @@ def just_time(*versions):
     @param versions: A tuple of elements, each containing parameters for one specific version
     """
     for name, args in versions:
-        mean, std, output = time_function(call_version)(args)
+        mean, std, output = time_function(volumerender.main)(args)
         compare_data(output)
         print(f"{name} : {mean}s +- {std}")
 
