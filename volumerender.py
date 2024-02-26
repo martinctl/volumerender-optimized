@@ -53,12 +53,12 @@ def transfer_function_optimized(x):
 def render_angle(datacube, points, angle, n_angles, args, N=180):
     print("Rendering Scene " + str(angle + 1) + " of " + str(n_angles) + ".")
     
-    angle = np.pi / 2 * angle / n_angles
+    new_angle = np.pi / 2 * angle / n_angles
     c = np.linspace(-N / 2, N / 2, N)
     qx, qy, qz = np.meshgrid(c, c, c)
     qx_r = qx
-    qy_r = qy * np.cos(angle) - qz * np.sin(angle)
-    qz_r = qy * np.sin(angle) + qz * np.cos(angle)
+    qy_r = qy * np.cos(new_angle) - qz * np.sin(new_angle)
+    qz_r = qy * np.sin(new_angle) + qz * np.cos(new_angle)
     qi = np.array([qx_r.ravel(), qy_r.ravel(), qz_r.ravel()]).T
     
     # Interpolate onto Camera Grid
@@ -202,6 +202,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--parallel",
+        default="serial",
         choices=["serial", "concurrent-futures", "multiprocessing"],
         dest="parallel",
         help="Use parallel processing",
